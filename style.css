@@ -1,0 +1,245 @@
+:root {
+  --bg: #0f1117;
+  --card-bg: #161b22;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --accent: #3b82f6;
+  --accent-glow: #60a5fa;
+  --border: #334155;
+  --red: #f87171;
+}
+
+[data-theme="dark"] {
+  background: var(--bg);
+  color: var(--text);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+
+.logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--accent-glow);
+  text-shadow: 0 0 10px rgba(59,130,246,0.5);
+}
+
+.auth button {
+  margin-left: 1rem;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auth button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #60a5fa, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-dim);
+  margin-bottom: 3rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.8rem 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(59,130,246,0.08));
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 20px 30px -10px rgba(0,0,0,0.6), 0 0 20px rgba(59,130,246,0.25);
+}
+
+.card.inactive {
+  opacity: 0.55;
+  filter: grayscale(0.4);
+}
+
+.card.inactive:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border);
+  cursor: not-allowed;
+}
+
+.icon {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.card h3 {
+  font-size: 1.35rem;
+  margin-bottom: 0.6rem;
+}
+
+.card p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+/* 鼠标悬停提示（title 属性已足够，但可增强） */
+.card[title] {
+  position: relative;
+}
+
+.card[title]:hover:after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  z-index: 10;
+  margin-bottom: 8px;
+  border: 1px solid #334155;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #1e293b;
+  padding: 2.2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 420px;
+  border: 1px solid #334155;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  right: 1.5rem;
+  top: 1rem;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--text-dim);
+}
+
+.modal input, .modal button {
+  width: 100%;
+  padding: 0.9rem;
+  margin: 0.8rem 0;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: white;
+  font-size: 1rem;
+}
+
+.modal button {
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal button:hover {
+  background: #2563eb;
+}
+
+#sendCode {
+  width: auto;
+  background: #475569;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+  margin-left: 0.8rem;
+}
+
+#toggleText {
+  text-align: center;
+  margin-top: 1.2rem;
+  color: var(--text-dim);
+}
+
+#toggleText a {
+  color: var(--accent-glow);
+  text-decoration: none;
+}
+
+/* 响应式 */
+@media (max-width: 600px) {
+  body { padding: 1.2rem; }
+  h1 { font-size: 2.2rem; }
+  .grid { gap: 1.2rem; }
+}

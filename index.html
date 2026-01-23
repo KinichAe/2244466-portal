@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2244466 控制台</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <div class="logo">2244466</div>
+    <div class="auth">
+      <button id="loginBtn">登录</button>
+      <button id="registerBtn">注册</button>
+    </div>
+  </header>
+
+  <main>
+    <h1>服务控制台</h1>
+    <p class="subtitle">快速访问你的在线工具</p>
+
+    <div class="grid">
+
+      <!-- 已上线服务 -->
+      <a href="https://note.2244466.xyz" class="card active" target="_blank">
+        <div class="icon">📝</div>
+        <h3>Note</h3>
+        <p>Obsidian 笔记同步 & 发布面板</p>
+      </a>
+
+      <a href="https://memo.2244466.xyz" class="card active" target="_blank">
+        <div class="icon">🗒️</div>
+        <h3>Memo</h3>
+        <p>轻量网页即时备忘录</p>
+      </a>
+
+      <a href="https://mail.kinich.cc" class="card active" target="_blank">
+        <div class="icon">✉️</div>
+        <h3>Mail</h3>
+        <p>个人电子邮件</p>
+      </a>
+
+      <a href="https://tempmail.2244466.xyz" class="card active" target="_blank">
+        <div class="icon">⏱️</div>
+        <h3>TempMail</h3>
+        <p>一次性临时邮箱</p>
+      </a>
+
+      <!-- 占位 - 未开发 -->
+      <div class="card inactive">
+        <div class="icon">🔧</div>
+        <h3>Drive</h3>
+        <p>云盘（暂未开发）</p>
+      </div>
+
+      <div class="card inactive">
+        <div class="icon">📊</div>
+        <h3>Stats</h3>
+        <p>使用统计（暂未开发）</p>
+      </div>
+
+      <div class="card inactive">
+        <div class="icon">🔐</div>
+        <h3>VPN</h3>
+        <p>私有隧道（暂未开发）</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 登录弹窗 -->
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle">登录</h2>
+      <form id="authForm">
+        <input type="email" placeholder="邮箱" required autocomplete="email"/>
+        <input type="password" placeholder="密码" required autocomplete="current-password"/>
+        <div id="verifyRow" style="display:none;">
+          <input type="text" placeholder="6位验证码" maxlength="6"/>
+          <button type="button" id="sendCode">发送验证码</button>
+        </div>
+        <button type="submit" id="submitBtn">登录</button>
+      </form>
+      <p id="toggleText">还没有账号？<a href="#" id="toggleMode">注册</a></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
