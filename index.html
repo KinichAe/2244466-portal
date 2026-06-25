@@ -3,170 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2244466 Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Digital Hub</title>
+    <style>
+        /* 极简现代主义风格：大量留白、平滑圆角、细腻阴影 */
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --primary-accent: #0066cc;
+            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 顶部导航栏 */
+        header {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-buttons button {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-left: 15px;
+            color: var(--text-main);
+            transition: color 0.2s ease;
+        }
+
+        .auth-buttons button.primary {
+            background-color: var(--primary-accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: background-color 0.2s ease;
+        }
+
+        .auth-buttons button.primary:hover {
+            background-color: #0055b3;
+        }
+
+        /* 主内容区 */
+        main {
+            max-width: 1040px;
+            width: 100%;
+            padding: 60px 24px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 44px;
+            letter-spacing: -0.5px;
+        }
+
+        /* 卡片网格布局 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 26px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hover-shadow);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .card h2 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .domain-tag {
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--primary-accent);
+            background: rgba(0, 102, 204, 0.08);
+            padding: 4px 10px;
+            border-radius: 8px;
+            align-self: flex-start;
+            font-weight: 500;
+        }
+
+        /* 气泡悬浮提示框 (Tooltip) */
+        .card[data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: rgba(29, 29, 31, 0.95);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            pointer-events: none;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card[data-tooltip]:hover::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-6px);
+        }
+
+        /* 未开发/不可点击卡片样式 */
+        .card.disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            background: transparent;
+            border: 1px dashed var(--text-muted);
+        }
+        .card.disabled:hover {
+            transform: none;
+            box-shadow: none;
+            background: transparent;
+        }
+        .card.disabled .domain-tag {
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-left">
-            <svg class="logo-icon" viewBox="0 0 24 24">
-                <path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/>
-            </svg>
-            <span>2244466 Dashboard</span>
+    <header>
+        <div class="logo">Digital Hub</div>
+        <div class="auth-buttons">
+            <button onclick="alert('注册功能正在规划中，未来将支持邮箱验证码注册。')">注册</button>
+            <button class="primary" onclick="alert('管理面板开发中，登录后将解锁高级监控面板。')">登录</button>
         </div>
-        <div class="nav-right">
-            <button class="btn btn-icon" id="themeToggle" title="切换主题">
-                <svg id="iconSun" style="display:none; width:20px; height:20px; stroke: currentColor; fill: none; stroke-width: 2;" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <svg id="iconMoon" style="width:20px; height:20px; stroke: currentColor; fill: none; stroke-width: 2;" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-            </button>
-            <div id="authButtons">
-                <button class="btn btn-ghost" onclick="window.app.openModal('loginModal')">登录</button>
-                <button class="btn btn-primary" onclick="window.app.openModal('registerModal')">注册</button>
-            </div>
-            <div id="userMenu" class="hidden" style="display: flex; align-items: center; gap: 10px;">
-                <span class="text-sm font-medium" id="navUsername">User</span>
-                <button class="btn btn-ghost text-sm" onclick="window.app.logout()">退出</button>
-            </div>
+    </header>
+
+    <main>
+        <h1>个人服务仪表盘</h1>
+        <div class="grid-container">
+            
+            <a href="https://note.2244466.xyz" class="card" target="_blank" data-tooltip="高密度数字工作站与知识库同步终端">
+                <h2>Obsidian 同步面板</h2>
+                <p>个人知识管理与笔记同步</p>
+                <span class="domain-tag">note.2244466.xyz</span>
+            </a>
+
+            <a href="https://memo.2244466.xyz" class="card" target="_blank" data-tooltip="轻量级、随时访问的碎片化记录工具">
+                <h2>网页备忘录</h2>
+                <p>快速记录灵感与待办</p>
+                <span class="domain-tag">memo.2244466.xyz</span>
+            </a>
+
+            <a href="https://mail.2244466.xyz" class="card" target="_blank" data-tooltip="使用专属域名的个人邮件收发系统">
+                <h2>专属电子邮箱</h2>
+                <p>独立域名的邮件终端</p>
+                <span class="domain-tag">mail.2244466.xyz</span>
+            </a>
+
+            <a href="https://gg.2244466.xyz" class="card" target="_blank" data-tooltip="追踪并自动维持英国号码活跃度">
+                <h2>Giffgaff 保号</h2>
+                <p>手机卡活跃任务管理</p>
+                <span class="domain-tag">gg.2244466.xyz</span>
+            </a>
+
+            <a href="https://password.2244466.xyz" class="card" target="_blank" data-tooltip="私有化部署、端到端加密的凭证库">
+                <h2>Bitwarden 密码库</h2>
+                <p>高安全性个人密码管理</p>
+                <span class="domain-tag">password.2244466.xyz</span>
+            </a>
+
+            <a href="https://tele.2244466.xyz" class="card" target="_blank" data-tooltip="去中心化的私人加密通讯频道">
+                <h2>加密聊天</h2>
+                <p>网页版端到端加密通讯</p>
+                <span class="domain-tag">tele.2244466.xyz</span>
+            </a>
+
+            <a href="https://ms.2244466.xyz" class="card" target="_blank" data-tooltip="个人专属的云端流媒体播放器">
+                <h2>在线音乐中心</h2>
+                <p>无损音乐播放与下载</p>
+                <span class="domain-tag">ms.2244466.xyz</span>
+            </a>
+
+            <a href="https://sub.2244466.xyz" class="card" target="_blank" data-tooltip="防止各种数字服务、eSIM等逾期未续费">
+                <h2>订阅提醒</h2>
+                <p>数字服务费用追踪</p>
+                <span class="domain-tag">sub.2244466.xyz</span>
+            </a>
+
+            <a href="#" class="card disabled" onclick="return false;" data-tooltip="网站暂未开发">
+                <h2>管理系统</h2>
+                <p>后台数据与权限控制中心</p>
+                <span class="domain-tag">admin.2244466.xyz</span>
+            </a>
+            
+            <a href="#" class="card disabled" onclick="return false;" data-tooltip="网站暂未开发">
+                <h2>临时邮箱服务</h2>
+                <p>阅后即焚的注册专用邮箱</p>
+                <span class="domain-tag">tempmail.2244466.xyz</span>
+            </a>
+
         </div>
-    </nav>
+    </main>
 
-    <div class="container">
-        <header class="hero">
-            <h1>服务控制台</h1>
-            <p>极简、安全、高效的个人数字化服务管理中心。</p>
-        </header>
-
-        <section id="userDashboard" class="dashboard-section hidden">
-            <div class="dash-row">
-                <h2>我的账户</h2>
-                <span class="text-sec text-sm" id="dashEmail"></span>
-            </div>
-            <div class="dash-grid">
-                <div class="dash-row">
-                    <span>API 密钥</span>
-                    <div>
-                        <span id="apiKey" class="api-key-box">Wait...</span>
-                        <button class="btn btn-ghost text-sm" onclick="window.app.generateApiKey()">重置</button>
-                    </div>
-                </div>
-                <div class="dash-row">
-                    <span>注册时间</span>
-                    <span class="text-sec" id="regDate">-</span>
-                </div>
-                <div id="adminEntry" class="dash-row hidden">
-                    <span>系统管理</span>
-                    <button class="btn btn-primary text-sm" onclick="window.app.openAdminPanel()">进入后台</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="adminDashboard" class="dashboard-section hidden" style="border: 1px solid var(--accent);">
-            <div class="dash-row">
-                <h2 style="color: var(--accent);">管理员后台</h2>
-                <button class="btn btn-ghost text-sm" onclick="window.app.closeAdminPanel()">关闭</button>
-            </div>
-            <div style="margin-top: 20px;">
-                <h3>用户列表</h3>
-                <div class="table-container">
-                    <table id="userTable">
-                        <thead>
-                            <tr>
-                                <th>用户名</th>
-                                <th>邮箱</th>
-                                <th>注册时间</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            </tbody>
-                    </table>
-                </div>
-                <button class="btn btn-ghost text-sm" style="margin-top:12px;" onclick="window.app.exportUsers()">导出用户数据 (JSON)</button>
-            </div>
-            <div style="margin-top: 30px;">
-                <h3>服务卡片管理</h3>
-                <div id="serviceToggles" class="dash-grid">
-                    </div>
-            </div>
-        </section>
-
-        <div class="services-grid" id="serviceGrid">
-            </div>
-    </div>
-
-    <div class="modal-overlay" id="loginModal">
-        <div class="modal">
-            <button class="close-btn" onclick="window.app.closeModal('loginModal')">✕</button>
-            <h2>欢迎回来</h2>
-            <form onsubmit="window.app.handleLogin(event)">
-                <div class="form-group">
-                    <label class="form-label">邮箱</label>
-                    <input type="email" id="loginEmail" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">密码</label>
-                    <input type="password" id="loginPass" class="form-input" required>
-                    <div style="text-align: right; margin-top: 6px;">
-                        <span class="link text-xs" onclick="window.app.switchModal('loginModal', 'forgotModal')">忘记密码？</span>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">登录</button>
-            </form>
-            <div class="form-footer">
-                还没有账号？ <span class="link" onclick="window.app.switchModal('loginModal', 'registerModal')">立即注册</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="registerModal">
-        <div class="modal">
-            <button class="close-btn" onclick="window.app.closeModal('registerModal')">✕</button>
-            <h2>创建账号</h2>
-            <form onsubmit="window.app.handleRegister(event)">
-                <div class="form-group">
-                    <label class="form-label">用户名 (4-20字符)</label>
-                    <input type="text" id="regName" class="form-input" required pattern="^[a-zA-Z0-9_-]{4,20}$" title="字母、数字、下划线、短横线">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">邮箱</label>
-                    <input type="email" id="regEmail" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">密码</label>
-                    <input type="password" id="regPass" class="form-input" required oninput="window.app.checkStrength(this.value)">
-                    <div class="strength-meter" style="display:block">
-                        <div class="strength-bar" id="strengthBar"></div>
-                    </div>
-                    <div class="strength-text text-sec" id="strengthText"></div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">注册</button>
-            </form>
-            <div class="form-footer">
-                已有账号？ <span class="link" onclick="window.app.switchModal('registerModal', 'loginModal')">直接登录</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="forgotModal">
-        <div class="modal">
-            <button class="close-btn" onclick="window.app.closeModal('forgotModal')">✕</button>
-            <h2>重置密码</h2>
-            <p class="text-sm text-sec" style="margin-bottom: 20px; text-align: center;">输入您的注册邮箱，我们将发送重置链接给您。</p>
-            <form onsubmit="window.app.handleForgot(event)">
-                <div class="form-group">
-                    <input type="email" class="form-input" placeholder="name@example.com" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">发送链接</button>
-            </form>
-            <div class="form-footer">
-                <span class="link" onclick="window.app.switchModal('forgotModal', 'loginModal')">返回登录</span>
-            </div>
-        </div>
-    </div>
-
-    <div id="toast" class="toast">Notification</div>
-
-    <script src="script.js"></script>
 </body>
 </html>
