@@ -5,14 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Hub</title>
     <style>
-        /* 极简现代主义风格：大量留白、平滑圆角、细腻阴影 */
+        /* ================= 基础与主题变量 ================= */
         :root {
             --bg-color: #f5f5f7;
             --card-bg: rgba(255, 255, 255, 0.85);
             --text-main: #1d1d1f;
             --text-muted: #86868b;
-            --primary-accent: #0066cc;
-            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+            --primary-accent: #007aff;
+            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+            --border-color: rgba(0, 0, 0, 0.05);
+            --modal-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark-classic"] {
+            --bg-color: #1c1c1e;
+            --card-bg: rgba(44, 44, 46, 0.85);
+            --text-main: #f5f5f7;
+            --text-muted: #98989d;
+            --primary-accent: #0a84ff;
+            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --modal-bg: rgba(44, 44, 46, 0.95);
+        }
+
+        [data-theme="dark-ocean"] {
+            --bg-color: #0e1621;
+            --card-bg: rgba(23, 33, 43, 0.85);
+            --text-main: #f5f5f7;
+            --text-muted: #7f91a4;
+            --primary-accent: #3390ec;
+            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --modal-bg: rgba(23, 33, 43, 0.95);
+        }
+
+        [data-theme="dark-purple"] {
+            --bg-color: #1a1824;
+            --card-bg: rgba(35, 33, 48, 0.85);
+            --text-main: #e2e1e8;
+            --text-muted: #8b889e;
+            --primary-accent: #9d8aff;
+            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --modal-bg: rgba(35, 33, 48, 0.95);
         }
 
         body {
@@ -24,13 +59,14 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            transition: background-color 0.4s ease, color 0.4s ease;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 顶部导航栏 */
+        /* ================= 导航与搜索 ================= */
         header {
             width: 100%;
-            padding: 20px 40px;
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -40,53 +76,73 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .logo {
-            font-size: 19px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
+        .logo { font-size: 19px; font-weight: 600; letter-spacing: -0.5px; }
+
+        .search-container {
+            position: relative;
+            margin: 0 20px;
+            flex-grow: 1;
+            max-width: 400px;
         }
+        .search-container input {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-container input:focus { border-color: var(--primary-accent); }
+        .search-shortcut {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--text-muted);
+            pointer-events: none;
+            background: rgba(128,128,128,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .controls { display: flex; align-items: center; gap: 20px; }
+        .theme-selector { display: flex; gap: 8px; }
+        .theme-btn {
+            width: 24px; height: 24px; border-radius: 50%;
+            border: 2px solid transparent; cursor: pointer; transition: transform 0.2s;
+        }
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: var(--text-main); }
+        .t-light { background: #f5f5f7; border: 1px solid #ccc; }
+        .t-dark { background: #1c1c1e; }
+        .t-ocean { background: #0e1621; }
+        .t-purple { background: #1a1824; }
 
         .auth-buttons button {
-            background: none;
-            border: none;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-left: 15px;
-            color: var(--text-main);
-            transition: color 0.2s ease;
+            background: none; border: none; font-size: 14px; font-weight: 500;
+            cursor: pointer; color: var(--text-main); transition: opacity 0.2s;
         }
-
         .auth-buttons button.primary {
-            background-color: var(--primary-accent);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            transition: background-color 0.2s ease;
+            background-color: var(--primary-accent); color: white;
+            padding: 8px 18px; border-radius: 20px; margin-left: 10px;
         }
 
-        .auth-buttons button.primary:hover {
-            background-color: #0055b3;
-        }
-
-        /* 主内容区 */
+        /* ================= 主内容与卡片 ================= */
         main {
-            max-width: 1040px;
-            width: 100%;
-            padding: 60px 24px;
-            box-sizing: border-box;
+            max-width: 1040px; width: 100%; padding: 60px 24px; box-sizing: border-box;
         }
 
-        h1 {
-            font-size: 38px;
-            font-weight: 700;
-            margin-bottom: 44px;
-            letter-spacing: -0.5px;
-        }
+        .greeting-section { margin-bottom: 44px; }
+        #greeting-text { font-size: 38px; font-weight: 700; margin: 0 0 8px 0; letter-spacing: -0.5px; }
+        #time-text { font-size: 16px; color: var(--text-muted); margin: 0; font-weight: 500; }
 
-        /* 卡片网格布局 */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -95,91 +151,106 @@
 
         .card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 26px;
+            border-radius: 22px;
+            padding: 30px 26px;
             text-decoration: none;
             color: var(--text-main);
             display: flex;
             flex-direction: column;
-            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s, opacity 0.2s;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--border-color);
             position: relative;
+            cursor: grab;
         }
+        .card:active { cursor: grabbing; }
+        .card.dragging { opacity: 0.4; transform: scale(0.95); }
+        .card.drag-over { border: 2px dashed var(--primary-accent); }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--hover-shadow); }
 
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--hover-shadow);
-            background: rgba(255, 255, 255, 0.95);
-        }
+        .card h2 { margin: 0 0 10px 0; font-size: 19px; font-weight: 600; pointer-events: none; }
+        .card p { margin: 0; font-size: 14px; color: var(--text-muted); line-height: 1.5; pointer-events: none; }
 
-        .card h2 {
-            margin: 0 0 8px 0;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .card p {
-            margin: 0;
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        .domain-tag {
-            margin-top: 20px;
-            font-size: 12px;
-            color: var(--primary-accent);
-            background: rgba(0, 102, 204, 0.08);
-            padding: 4px 10px;
-            border-radius: 8px;
-            align-self: flex-start;
-            font-weight: 500;
-        }
-
-        /* 气泡悬浮提示框 (Tooltip) */
-        .card[data-tooltip]::after {
-            content: attr(data-tooltip);
+        /* 置顶按钮 */
+        .pin-btn {
             position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-10px);
-            background: rgba(29, 29, 31, 0.95);
-            color: white;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-            pointer-events: none;
+            top: 16px; right: 16px;
+            background: none; border: none;
+            font-size: 16px; cursor: pointer;
+            opacity: 0.2; transition: opacity 0.2s, transform 0.2s;
             z-index: 10;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card:hover .pin-btn { opacity: 0.6; }
+        .pin-btn:hover { transform: scale(1.2); opacity: 1 !important; }
+        .card.pinned .pin-btn { opacity: 1; color: var(--primary-accent); text-shadow: 0 0 8px rgba(0,122,255,0.4); }
+        .card.pinned { border: 1px solid var(--primary-accent); }
+
+        .card.disabled { opacity: 0.5; cursor: not-allowed; border: 1px dashed var(--text-muted); }
+        .card.disabled:hover { transform: none; box-shadow: none; }
+
+        /* ================= 悬浮剪贴板 (Scratchpad) ================= */
+        .scratchpad-toggle {
+            position: fixed; bottom: 40px; right: 40px;
+            width: 50px; height: 50px;
+            border-radius: 25px; background: var(--primary-accent); color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background 0.2s; z-index: 999;
+        }
+        .scratchpad-toggle:hover { transform: scale(1.1); }
+        
+        .scratchpad-panel {
+            position: fixed; bottom: 100px; right: 40px;
+            width: 300px; height: 350px;
+            background: var(--modal-bg); border: 1px solid var(--border-color);
+            border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; flex-direction: column;
+            transform: translateY(20px); opacity: 0; pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 998;
+            padding: 20px; box-sizing: border-box;
+        }
+        .scratchpad-panel.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .scratchpad-panel h3 { margin: 0 0 10px 0; font-size: 16px; }
+        .scratchpad-panel textarea {
+            flex-grow: 1; width: 100%; resize: none; border: none;
+            background: transparent; color: var(--text-main); font-size: 14px;
+            outline: none; font-family: inherit; line-height: 1.5;
         }
 
-        .card[data-tooltip]:hover::after {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(-6px);
+        /* ================= 管理员 Modal ================= */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
         }
-
-        /* 未开发/不可点击卡片样式 */
-        .card.disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-            background: transparent;
-            border: 1px dashed var(--text-muted);
+        .modal {
+            background: var(--modal-bg); padding: 30px; border-radius: 20px;
+            width: 90%; max-width: 400px; border: 1px solid var(--border-color);
         }
-        .card.disabled:hover {
-            transform: none;
-            box-shadow: none;
-            background: transparent;
+        .setting-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid var(--border-color);
         }
-        .card.disabled .domain-tag {
-            color: var(--text-muted);
-            background: rgba(0, 0, 0, 0.05);
+        .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .4s; border-radius: 26px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 20px; width: 20px;
+            left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary-accent); }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .close-btn {
+            display: block; width: 100%; padding: 12px; margin-top: 20px;
+            background: var(--primary-accent); color: white; border: none;
+            border-radius: 12px; cursor: pointer; font-weight: 600;
         }
     </style>
 </head>
@@ -187,78 +258,336 @@
 
     <header>
         <div class="logo">Digital Hub</div>
-        <div class="auth-buttons">
-            <button onclick="alert('注册功能正在规划中，未来将支持邮箱验证码注册。')">注册</button>
-            <button class="primary" onclick="alert('管理面板开发中，登录后将解锁高级监控面板。')">登录</button>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索服务模块...">
+            <span class="search-shortcut">Ctrl+K</span>
+        </div>
+        <div class="controls">
+            <div class="theme-selector">
+                <div class="theme-btn t-light active" onclick="setTheme('light')" title="浅色"></div>
+                <div class="theme-btn t-dark" onclick="setTheme('dark-classic')" title="深色-经典"></div>
+                <div class="theme-btn t-ocean" onclick="setTheme('dark-ocean')" title="深色-深蓝"></div>
+                <div class="theme-btn t-purple" onclick="setTheme('dark-purple')" title="深色-暗紫"></div>
+            </div>
+            <div class="auth-buttons">
+                <button class="primary" onclick="adminLogin()">控制台</button>
+            </div>
         </div>
     </header>
 
     <main>
-        <h1>个人服务仪表盘</h1>
-        <div class="grid-container">
-            
-            <a href="https://note.2244466.xyz" class="card" target="_blank" data-tooltip="高密度数字工作站与知识库同步终端">
+        <div class="greeting-section">
+            <h1 id="greeting-text">你好，Wuqi</h1>
+            <p id="time-text">加载时间中...</p>
+        </div>
+
+        <div class="grid-container" id="module-container">
+            <a href="https://note.2244466.xyz" class="card" data-id="note" draggable="true">
+                <button class="pin-btn" onclick="togglePin(event, 'note')" title="置顶/取消置顶">📌</button>
                 <h2>Obsidian 同步面板</h2>
                 <p>个人知识管理与笔记同步</p>
-                <span class="domain-tag">note.2244466.xyz</span>
             </a>
-
-            <a href="https://memo.2244466.xyz" class="card" target="_blank" data-tooltip="轻量级、随时访问的碎片化记录工具">
+            <a href="https://memo.2244466.xyz" class="card" data-id="memo" draggable="true">
+                <button class="pin-btn" onclick="togglePin(event, 'memo')">📌</button>
                 <h2>网页备忘录</h2>
                 <p>快速记录灵感与待办</p>
-                <span class="domain-tag">memo.2244466.xyz</span>
             </a>
-
-            <a href="https://mail.2244466.xyz" class="card" target="_blank" data-tooltip="使用专属域名的个人邮件收发系统">
+            <a href="https://mail.2244466.xyz" class="card" data-id="mail" draggable="true">
+                <button class="pin-btn" onclick="togglePin(event, 'mail')">📌</button>
                 <h2>专属电子邮箱</h2>
                 <p>独立域名的邮件终端</p>
-                <span class="domain-tag">mail.2244466.xyz</span>
             </a>
-
-            <a href="https://gg.2244466.xyz" class="card" target="_blank" data-tooltip="追踪并自动维持英国号码活跃度">
+            <a href="https://gg.2244466.xyz" class="card" data-id="gg" draggable="true">
+                <button class="pin-btn" onclick="togglePin(event, 'gg')">📌</button>
                 <h2>Giffgaff 保号</h2>
                 <p>手机卡活跃任务管理</p>
-                <span class="domain-tag">gg.2244466.xyz</span>
             </a>
-
-            <a href="https://password.2244466.xyz" class="card" target="_blank" data-tooltip="私有化部署、端到端加密的凭证库">
+            <a href="https://password.2244466.xyz" class="card" data-id="password" draggable="true">
+                <button class="pin-btn" onclick="togglePin(event, 'password')">📌</button>
                 <h2>Bitwarden 密码库</h2>
                 <p>高安全性个人密码管理</p>
-                <span class="domain-tag">password.2244466.xyz</span>
             </a>
-
-            <a href="https://tele.2244466.xyz" class="card" target="_blank" data-tooltip="去中心化的私人加密通讯频道">
+            <a href="https://tele.2244466.xyz" class="card" data-id="tele" draggable="true">
+                <button class="pin-btn" onclick="togglePin(event, 'tele')">📌</button>
                 <h2>加密聊天</h2>
                 <p>网页版端到端加密通讯</p>
-                <span class="domain-tag">tele.2244466.xyz</span>
             </a>
-
-            <a href="https://ms.2244466.xyz" class="card" target="_blank" data-tooltip="个人专属的云端流媒体播放器">
+            <a href="https://ms.2244466.xyz" class="card" data-id="ms" draggable="true">
+                <button class="pin-btn" onclick="togglePin(event, 'ms')">📌</button>
                 <h2>在线音乐中心</h2>
                 <p>无损音乐播放与下载</p>
-                <span class="domain-tag">ms.2244466.xyz</span>
             </a>
-
-            <a href="https://sub.2244466.xyz" class="card" target="_blank" data-tooltip="防止各种数字服务、eSIM等逾期未续费">
+            <a href="https://sub.2244466.xyz" class="card" data-id="sub" draggable="true">
+                <button class="pin-btn" onclick="togglePin(event, 'sub')">📌</button>
                 <h2>订阅提醒</h2>
                 <p>数字服务费用追踪</p>
-                <span class="domain-tag">sub.2244466.xyz</span>
             </a>
-
-            <a href="#" class="card disabled" onclick="return false;" data-tooltip="网站暂未开发">
-                <h2>管理系统</h2>
-                <p>后台数据与权限控制中心</p>
-                <span class="domain-tag">admin.2244466.xyz</span>
+            <a href="#" class="card disabled" data-id="admin" draggable="true" onclick="return false;">
+                <button class="pin-btn" onclick="togglePin(event, 'admin')">📌</button>
+                <h2>高级系统监控</h2>
+                <p>后台数据与权限控制中心(未开发)</p>
             </a>
-            
-            <a href="#" class="card disabled" onclick="return false;" data-tooltip="网站暂未开发">
+            <a href="#" class="card disabled" data-id="tempmail" draggable="true" onclick="return false;">
+                <button class="pin-btn" onclick="togglePin(event, 'tempmail')">📌</button>
                 <h2>临时邮箱服务</h2>
-                <p>阅后即焚的注册专用邮箱</p>
-                <span class="domain-tag">tempmail.2244466.xyz</span>
+                <p>阅后即焚的注册专用邮箱(未开发)</p>
             </a>
-
         </div>
     </main>
 
+    <div class="scratchpad-toggle" onclick="toggleScratchpad()">+</div>
+    <div class="scratchpad-panel" id="scratchpad">
+        <h3>临时剪贴板</h3>
+        <textarea id="scratchpad-text" placeholder="随手记下一些临时内容... 自动保存"></textarea>
+    </div>
+
+    <div class="modal-overlay" id="admin-modal">
+        <div class="modal">
+            <h3 style="margin-top:0;">控制面板 (模块可见性)</h3>
+            <div id="settings-list"></div>
+            <button class="close-btn" onclick="closeAdmin()">保存并关闭</button>
+        </div>
+    </div>
+
+    <script>
+        // ================= 1. 主题切换 =================
+        function setTheme(themeName) {
+            if (themeName === 'light') { document.documentElement.removeAttribute('data-theme'); } 
+            else { document.documentElement.setAttribute('data-theme', themeName); }
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            if(themeName === 'light') document.querySelector('.t-light').classList.add('active');
+            if(themeName === 'dark-classic') document.querySelector('.t-dark').classList.add('active');
+            if(themeName === 'dark-ocean') document.querySelector('.t-ocean').classList.add('active');
+            if(themeName === 'dark-purple') document.querySelector('.t-purple').classList.add('active');
+            localStorage.setItem('wuqi-theme', themeName);
+        }
+        setTheme(localStorage.getItem('wuqi-theme') || 'light');
+
+        // ================= 2. 动态问候与时间 =================
+        function updateTime() {
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting = "你好，Wuqi";
+            if (hour >= 5 && hour < 11) greeting = "早上好，Wuqi";
+            else if (hour >= 11 && hour < 13) greeting = "中午好，Wuqi";
+            else if (hour >= 13 && hour < 18) greeting = "下午好，Wuqi";
+            else greeting = "晚上好，Wuqi";
+            
+            document.getElementById('greeting-text').innerText = greeting;
+            const options = { month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('time-text').innerText = now.toLocaleDateString('zh-CN', options);
+        }
+        updateTime();
+        setInterval(updateTime, 60000); // 每分钟更新
+
+        // ================= 3. 快捷搜索功能 =================
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                const text = card.innerText.toLowerCase();
+                // 搜索时强制显示匹配项（忽略后台隐藏设置），清空时恢复原状
+                if (text.includes(term)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            if (term === '') applyModuleVisibility(); // 恢复后台设置的隐藏状态
+        });
+
+        // 监听 Ctrl+K 快捷键
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+
+        // ================= 4. 临时剪贴板 =================
+        const spPanel = document.getElementById('scratchpad');
+        const spText = document.getElementById('scratchpad-text');
+        spText.value = localStorage.getItem('wuqi-scratchpad') || '';
+        
+        spText.addEventListener('input', () => {
+            localStorage.setItem('wuqi-scratchpad', spText.value);
+        });
+
+        function toggleScratchpad() {
+            spPanel.classList.toggle('active');
+            if(spPanel.classList.contains('active')) spText.focus();
+        }
+
+        // ================= 5. 管理员控制面板 =================
+        const moduleState = JSON.parse(localStorage.getItem('wuqi-modules')) || {};
+        
+        function applyModuleVisibility() {
+            if(searchInput.value !== '') return; // 搜索状态下不应用
+            document.querySelectorAll('.card').forEach(card => {
+                const id = card.getAttribute('data-id');
+                card.style.display = moduleState[id] === false ? 'none' : 'flex';
+            });
+        }
+
+        function adminLogin() {
+            if (prompt("请输入管理员密码：(测试密码 admin)") === "admin") {
+                const list = document.getElementById('settings-list');
+                list.innerHTML = '';
+                document.querySelectorAll('.card').forEach(card => {
+                    const id = card.getAttribute('data-id');
+                    const title = card.querySelector('h2').innerText;
+                    const isChecked = moduleState[id] !== false;
+                    list.insertAdjacentHTML('beforeend', `
+                        <div class="setting-item">
+                            <span>${title}</span>
+                            <label class="switch">
+                                <input type="checkbox" onchange="toggleModule('${id}', this.checked)" ${isChecked ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    `);
+                });
+                document.getElementById('admin-modal').style.display = 'flex';
+            } else { alert("密码错误！"); }
+        }
+
+        function toggleModule(id, isVisible) {
+            moduleState[id] = isVisible;
+            localStorage.setItem('wuqi-modules', JSON.stringify(moduleState));
+            applyModuleVisibility();
+        }
+        function closeAdmin() { document.getElementById('admin-modal').style.display = 'none'; }
+
+
+        // ================= 6. 拖拽排序与置顶核心逻辑 =================
+        const container = document.getElementById('module-container');
+        let cardOrder = JSON.parse(localStorage.getItem('wuqi-order')) || [];
+        let pinnedCards = JSON.parse(localStorage.getItem('wuqi-pinned')) || [];
+        
+        let dragSrcEl = null;
+
+        function renderCards() {
+            const cards = Array.from(document.querySelectorAll('.card'));
+            
+            // 第一次加载时，如果本地没有排序记录，初始化顺序
+            if (cardOrder.length === 0) {
+                cardOrder = cards.map(c => c.getAttribute('data-id'));
+            }
+
+            // 对卡片进行排序逻辑：
+            // 1. 置顶的卡片排在最前面
+            // 2. 其余卡片按照 cardOrder 中的顺序排列
+            cards.sort((a, b) => {
+                const idA = a.getAttribute('data-id');
+                const idB = b.getAttribute('data-id');
+                const aPinned = pinnedCards.includes(idA);
+                const bPinned = pinnedCards.includes(idB);
+
+                if (aPinned && !bPinned) return -1;
+                if (!aPinned && bPinned) return 1;
+                
+                // 如果都没置顶，或者都置顶了，按保存的顺序排
+                return cardOrder.indexOf(idA) - cardOrder.indexOf(idB);
+            });
+
+            // 清空容器并重新按顺序插入
+            container.innerHTML = '';
+            cards.forEach(card => {
+                const id = card.getAttribute('data-id');
+                if (pinnedCards.includes(id)) {
+                    card.classList.add('pinned');
+                } else {
+                    card.classList.remove('pinned');
+                }
+                container.appendChild(card);
+            });
+
+            applyModuleVisibility();
+            setupDragAndDrop(); // 重新绑定拖拽事件
+        }
+
+        // 切换置顶状态 (注意这里使用阻止事件冒泡，防止点击置顶按钮时触发 a 标签跳转)
+        function togglePin(e, id) {
+            e.preventDefault(); 
+            e.stopPropagation();
+            
+            if (pinnedCards.includes(id)) {
+                pinnedCards = pinnedCards.filter(p => p !== id);
+            } else {
+                pinnedCards.push(id);
+            }
+            localStorage.setItem('wuqi-pinned', JSON.stringify(pinnedCards));
+            renderCards(); // 触发重新排序渲染
+        }
+
+        // 设置拖拽监听器
+        function setupDragAndDrop() {
+            const draggables = document.querySelectorAll('.card');
+            draggables.forEach(card => {
+                card.addEventListener('dragstart', handleDragStart);
+                card.addEventListener('dragover', handleDragOver);
+                card.addEventListener('dragenter', handleDragEnter);
+                card.addEventListener('dragleave', handleDragLeave);
+                card.addEventListener('drop', handleDrop);
+                card.addEventListener('dragend', handleDragEnd);
+                
+                // 防止点击拖拽时触发链接跳转
+                card.addEventListener('click', (e) => {
+                    if (card.classList.contains('dragging-occurred')) {
+                        e.preventDefault();
+                        card.classList.remove('dragging-occurred');
+                    }
+                });
+            });
+        }
+
+        function handleDragStart(e) {
+            dragSrcEl = this;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.outerHTML);
+            this.classList.add('dragging');
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) { e.preventDefault(); }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDragEnter(e) { this.classList.add('drag-over'); }
+        function handleDragLeave(e) { this.classList.remove('drag-over'); }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) { e.stopPropagation(); }
+            if (dragSrcEl !== this) {
+                // 标记发生了拖拽，防止触发点击
+                dragSrcEl.classList.add('dragging-occurred');
+                
+                // 交换在 DOM 中的位置
+                const srcId = dragSrcEl.getAttribute('data-id');
+                const targetId = this.getAttribute('data-id');
+                
+                // 更新卡片顺序数组
+                const srcIndex = cardOrder.indexOf(srcId);
+                const targetIndex = cardOrder.indexOf(targetId);
+                cardOrder.splice(srcIndex, 1);
+                cardOrder.splice(targetIndex, 0, srcId);
+                
+                localStorage.setItem('wuqi-order', JSON.stringify(cardOrder));
+                renderCards(); // 重新渲染
+            }
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            document.querySelectorAll('.card').forEach(c => {
+                c.classList.remove('dragging', 'drag-over');
+            });
+        }
+
+        // 初始化渲染
+        renderCards();
+
+    </script>
 </body>
 </html>
