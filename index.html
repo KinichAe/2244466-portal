@@ -7,59 +7,35 @@
     <style>
         /* ================= 基础与主题变量 ================= */
         :root {
-            --bg-color: #f5f5f7;
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --text-main: #1d1d1f;
-            --text-muted: #86868b;
-            --primary-accent: #007aff;
-            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
-            --border-color: rgba(0, 0, 0, 0.05);
-            --modal-bg: rgba(255, 255, 255, 0.95);
+            --bg-color: #f5f5f7; --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #1d1d1f; --text-muted: #86868b;
+            --primary-accent: #007aff; --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+            --border-color: rgba(0, 0, 0, 0.05); --modal-bg: rgba(255, 255, 255, 0.95);
         }
-
         [data-theme="dark-classic"] {
-            --bg-color: #1c1c1e;
-            --card-bg: rgba(44, 44, 46, 0.85);
-            --text-main: #f5f5f7;
-            --text-muted: #98989d;
-            --primary-accent: #0a84ff;
-            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --modal-bg: rgba(44, 44, 46, 0.95);
+            --bg-color: #1c1c1e; --card-bg: rgba(44, 44, 46, 0.85);
+            --text-main: #f5f5f7; --text-muted: #98989d;
+            --primary-accent: #0a84ff; --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            --border-color: rgba(255, 255, 255, 0.1); --modal-bg: rgba(44, 44, 46, 0.95);
         }
-
         [data-theme="dark-ocean"] {
-            --bg-color: #0e1621;
-            --card-bg: rgba(23, 33, 43, 0.85);
-            --text-main: #f5f5f7;
-            --text-muted: #7f91a4;
-            --primary-accent: #3390ec;
-            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-            --border-color: rgba(255, 255, 255, 0.05);
-            --modal-bg: rgba(23, 33, 43, 0.95);
+            --bg-color: #0e1621; --card-bg: rgba(23, 33, 43, 0.85);
+            --text-main: #f5f5f7; --text-muted: #7f91a4;
+            --primary-accent: #3390ec; --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+            --border-color: rgba(255, 255, 255, 0.05); --modal-bg: rgba(23, 33, 43, 0.95);
         }
-
         [data-theme="dark-purple"] {
-            --bg-color: #1a1824;
-            --card-bg: rgba(35, 33, 48, 0.85);
-            --text-main: #e2e1e8;
-            --text-muted: #8b889e;
-            --primary-accent: #9d8aff;
-            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-            --border-color: rgba(255, 255, 255, 0.05);
-            --modal-bg: rgba(35, 33, 48, 0.95);
+            --bg-color: #1a1824; --card-bg: rgba(35, 33, 48, 0.85);
+            --text-main: #e2e1e8; --text-muted: #8b889e;
+            --primary-accent: #9d8aff; --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            --border-color: rgba(255, 255, 255, 0.05); --modal-bg: rgba(35, 33, 48, 0.95);
         }
 
         body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color); color: var(--text-main);
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; transition: background-color 0.4s ease, color 0.4s ease;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -70,9 +46,7 @@
             -webkit-backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 100;
             border-bottom: 1px solid var(--border-color);
         }
-
         .logo { font-size: 19px; font-weight: 600; letter-spacing: -0.5px; }
-
         .search-container { position: relative; margin: 0 20px; flex-grow: 1; max-width: 400px; }
         .search-container input {
             width: 100%; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--border-color);
@@ -82,8 +56,6 @@
         .search-container input:focus { border-color: var(--primary-accent); }
         
         .controls { display: flex; align-items: center; gap: 20px; }
-        
-        /* 优化后的主题选择器：使用渐变色让其易于区分 */
         .theme-selector { display: flex; gap: 10px; align-items: center; }
         .theme-btn {
             width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; 
@@ -91,7 +63,6 @@
         }
         .theme-btn:hover { transform: scale(1.15); }
         .theme-btn.active { border-color: var(--primary-accent); box-shadow: 0 0 0 2px var(--bg-color), 0 0 0 4px var(--primary-accent); }
-        
         .t-light { background: linear-gradient(135deg, #ffffff, #e5e5ea); border: 1px solid #d1d1d6; }
         .t-dark { background: linear-gradient(135deg, #48484a, #1c1c1e); }
         .t-ocean { background: linear-gradient(135deg, #3390ec, #0e1621); }
@@ -108,10 +79,7 @@
         #greeting-text { font-size: 38px; font-weight: 700; margin: 0 0 8px 0; letter-spacing: -0.5px; }
         #time-text { font-size: 16px; color: var(--text-muted); margin: 0; font-weight: 500; }
 
-        .grid-container {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
-        }
-
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
         .card {
             background: var(--card-bg); border-radius: 22px; padding: 30px 26px;
             text-decoration: none; color: var(--text-main); display: flex; flex-direction: column;
@@ -153,7 +121,6 @@
         .scratchpad-panel.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
         .scratchpad-panel h3 { margin: 0 0 10px 0; font-size: 16px; display: flex; justify-content: space-between; align-items: center;}
         
-        /* 推送到 Memos 的按钮 */
         .push-memos-btn {
             background: var(--primary-accent); color: white; border: none; padding: 6px 12px;
             border-radius: 12px; font-size: 12px; cursor: pointer; transition: opacity 0.2s;
@@ -182,21 +149,17 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 14px;
         }
-        
-        /* 针对 Memos Token 的输入框 */
         .token-input {
             width: 100%; padding: 8px; border: 1px solid var(--border-color);
             border-radius: 8px; background: var(--card-bg); color: var(--text-main);
             box-sizing: border-box; font-size: 12px; margin-bottom: 10px;
         }
-
         .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 26px; }
         .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--primary-accent); }
         input:checked + .slider:before { transform: translateX(20px); }
-        
         .close-btn {
             display: block; width: 100%; padding: 12px; margin-top: 20px;
             background: var(--primary-accent); color: white; border: none;
@@ -208,9 +171,7 @@
 
     <header>
         <div class="logo">Digital Hub</div>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="搜索服务模块...">
-        </div>
+        <div class="search-container"><input type="text" id="searchInput" placeholder="搜索服务模块..."></div>
         <div class="controls">
             <div class="theme-selector">
                 <div class="theme-btn t-light active" onclick="setTheme('light')" title="浅色"></div>
@@ -274,6 +235,7 @@
         </div>
     </main>
 
+    <!-- 悬浮剪贴板 -->
     <div class="scratchpad-toggle" onclick="toggleScratchpad()">+</div>
     <div class="scratchpad-panel" id="scratchpad">
         <h3>
@@ -283,6 +245,7 @@
         <textarea id="scratchpad-text" placeholder="随手记下临时内容...本地自动保存。&#10;配置 Token 后可一键推送到备忘录。"></textarea>
     </div>
 
+    <!-- 隐藏的管理后台弹窗 -->
     <div class="modal-overlay" id="admin-modal">
         <div class="modal">
             <h3 style="margin-top:0;">控制面板</h3>
@@ -314,29 +277,24 @@
         }
         setTheme(localStorage.getItem('wuqi-theme') || 'light');
 
-        // 2. 动态问候与时间 (去掉了名字)
+        // 2. 动态问候与时间
         function updateTime() {
-            const now = new Date();
-            const hour = now.getHours();
-            let greeting = "你好";
+            const now = new Date(); const hour = now.getHours(); let greeting = "你好";
             if (hour >= 5 && hour < 11) greeting = "早上好";
             else if (hour >= 11 && hour < 13) greeting = "中午好";
             else if (hour >= 13 && hour < 18) greeting = "下午好";
             else greeting = "晚上好";
-            
             document.getElementById('greeting-text').innerText = greeting;
             const options = { month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit' };
             document.getElementById('time-text').innerText = now.toLocaleDateString('zh-CN', options);
         }
-        updateTime();
-        setInterval(updateTime, 60000);
+        updateTime(); setInterval(updateTime, 60000);
 
         // 3. 临时剪贴板与 Memos API 推送
         const spPanel = document.getElementById('scratchpad');
         const spText = document.getElementById('scratchpad-text');
         const btnPush = document.getElementById('pushMemosBtn');
         spText.value = localStorage.getItem('wuqi-scratchpad') || '';
-        
         spText.addEventListener('input', () => { localStorage.setItem('wuqi-scratchpad', spText.value); });
 
         function toggleScratchpad() {
@@ -344,54 +302,40 @@
             if(spPanel.classList.contains('active')) spText.focus();
         }
 
-        // 推送到 Memos 的核心逻辑
         async function pushToMemos() {
             const content = spText.value.trim();
             const token = localStorage.getItem('wuqi-memos-token');
             
             if (!content) { alert("剪贴板为空！"); return; }
-            if (!token) { 
-                alert("未配置 Token！请点击右上角【控制台】(密码 admin)，在配置中填入你的 Memos Access Token。"); 
-                return; 
-            }
+            if (!token) { alert("未配置 Token！请点击右上角【控制台】，在配置中填入你的 Memos Access Token。"); return; }
 
-            btnPush.innerText = "发送中...";
-            btnPush.disabled = true;
+            btnPush.innerText = "发送中..."; btnPush.disabled = true;
 
             try {
-                // 兼容 Memos 常见版本 API
-                const response = await fetch('https://memo.2244466.xyz/api/v1/memo', {
+                // 核心修复点：将接口修改为最新的 /api/v1/memos
+                const response = await fetch('https://memo.2244466.xyz/api/v1/memos', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify({ content: content })
                 });
 
                 if (response.ok) {
                     btnPush.innerText = "已保存 ✔";
                     setTimeout(() => {
-                        spText.value = ''; // 成功后清空面板
-                        localStorage.removeItem('wuqi-scratchpad');
-                        btnPush.innerText = "保存到 Memos";
-                        btnPush.disabled = false;
-                        toggleScratchpad(); // 自动收起面板
+                        spText.value = ''; localStorage.removeItem('wuqi-scratchpad');
+                        btnPush.innerText = "保存到 Memos"; btnPush.disabled = false;
+                        toggleScratchpad();
                     }, 1500);
-                } else {
-                    throw new Error(`HTTP Error: ${response.status}`);
-                }
+                } else { throw new Error(`HTTP Error: ${response.status}`); }
             } catch (error) {
-                console.error(error);
-                alert("推送失败，请检查你的 Token 是否正确，或者浏览器 F12 控制台网络报错。");
-                btnPush.innerText = "保存到 Memos";
-                btnPush.disabled = false;
+                console.error("Memos API 请求失败:", error);
+                alert("推送失败！请检查:\n1. Token 是否包含多余空格\n2. Memos 服务端是否允许跨域请求(CORS)");
+                btnPush.innerText = "保存到 Memos"; btnPush.disabled = false;
             }
         }
 
         // 4. 管理员控制面板
         const moduleState = JSON.parse(localStorage.getItem('wuqi-modules')) || {};
-        
         function applyModuleVisibility() {
             document.querySelectorAll('.card').forEach(card => {
                 const id = card.getAttribute('data-id');
@@ -400,12 +344,12 @@
         }
 
         function adminLogin() {
-            if (prompt("请输入管理员密码：") === "admin") {
-                // 回显 Token
+            // 这里将验证密码修改为了 wuqi123
+            const ADMIN_PASSWORD = "wuqi123";
+            
+            if (prompt("请输入管理员密码：") === ADMIN_PASSWORD) {
                 document.getElementById('memosTokenInput').value = localStorage.getItem('wuqi-memos-token') || '';
-                
-                const list = document.getElementById('settings-list');
-                list.innerHTML = '';
+                const list = document.getElementById('settings-list'); list.innerHTML = '';
                 document.querySelectorAll('.card').forEach(card => {
                     const id = card.getAttribute('data-id');
                     const title = card.querySelector('h2').innerText;
@@ -427,13 +371,11 @@
         function saveMemosToken(val) { localStorage.setItem('wuqi-memos-token', val.trim()); }
 
         function toggleModule(id, isVisible) {
-            moduleState[id] = isVisible;
-            localStorage.setItem('wuqi-modules', JSON.stringify(moduleState));
-            applyModuleVisibility();
+            moduleState[id] = isVisible; localStorage.setItem('wuqi-modules', JSON.stringify(moduleState)); applyModuleVisibility();
         }
         function closeAdmin() { document.getElementById('admin-modal').style.display = 'none'; }
 
-        // 拖拽和置顶逻辑保持不变...
+        // 5. 拖拽与置顶逻辑
         const container = document.getElementById('module-container');
         let cardOrder = JSON.parse(localStorage.getItem('wuqi-order')) || [];
         let pinnedCards = JSON.parse(localStorage.getItem('wuqi-pinned')) || [];
@@ -451,8 +393,7 @@
             container.innerHTML = '';
             cards.forEach(card => {
                 const id = card.getAttribute('data-id');
-                if (pinnedCards.includes(id)) { card.classList.add('pinned'); } 
-                else { card.classList.remove('pinned'); }
+                if (pinnedCards.includes(id)) { card.classList.add('pinned'); } else { card.classList.remove('pinned'); }
                 container.appendChild(card);
             });
             applyModuleVisibility();
@@ -460,20 +401,17 @@
 
         function togglePin(e, id) {
             e.preventDefault(); e.stopPropagation();
-            if (pinnedCards.includes(id)) { pinnedCards = pinnedCards.filter(p => p !== id); } 
-            else { pinnedCards.push(id); }
-            localStorage.setItem('wuqi-pinned', JSON.stringify(pinnedCards));
-            renderCards();
+            if (pinnedCards.includes(id)) { pinnedCards = pinnedCards.filter(p => p !== id); } else { pinnedCards.push(id); }
+            localStorage.setItem('wuqi-pinned', JSON.stringify(pinnedCards)); renderCards();
         }
         renderCards();
 
-        // 搜索功能保持不变
+        // 6. 搜索功能
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const term = e.target.value.toLowerCase();
             document.querySelectorAll('.card').forEach(card => {
                 const text = card.innerText.toLowerCase();
-                if (text.includes(term)) { card.style.display = 'flex'; } 
-                else { card.style.display = 'none'; }
+                if (text.includes(term)) { card.style.display = 'flex'; } else { card.style.display = 'none'; }
             });
             if (term === '') applyModuleVisibility();
         });
